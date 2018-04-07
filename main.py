@@ -42,8 +42,9 @@ class Worker(threading.Thread):
 
 def download(_year, _month):
     global task_list
+    #  skip means the offset, show means how many entries per page
     skip = 0
-    show = 5
+    show = 500
     page_url = '/list/cs/%2d%02d' % (_year, _month)
     page = spider.get_page(page_url)
     pattern_total = re.compile(S_PATTERN_EMTRIES, re.S)
@@ -54,7 +55,6 @@ def download(_year, _month):
     total_num = int(total_obj.group(1))
     print("page_url:%s\ntotal_num:%d" % (page_url, total_num))
     while skip < total_num:
-        #  skip means the offset, show means how many entries per page
         #  e.g.:/list/cs/1801?skip=0&show=1000
         page_url = '/list/cs/%02d%02d?skip=%d&show=%d' % (_year, _month, skip, show)
         page = spider.get_page(page_url)
