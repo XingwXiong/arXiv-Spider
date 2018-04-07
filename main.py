@@ -48,7 +48,7 @@ def download(_year, _month):
     #  skip means the offset, show means how many entries per page
     skip = 0
     show = 100
-    page_url = '/list/cs/%2d%02d' % (_year, _month)
+    page_url = '/list/cs/%02d%02d' % (_year, _month)
     page = spider.get_page(page_url)
     pattern_total = re.compile(S_PATTERN_EMTRIES, re.S)
     total_obj = re.search(pattern_total, page)
