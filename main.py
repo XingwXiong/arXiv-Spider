@@ -41,6 +41,8 @@ class Worker(threading.Thread):
             file_name = "%s.pdf" % file_id
             file_url = '/pdf/%s' % file_id
             spider.get_file(file_name, file_url)
+            # sleep 1 second after downloading
+            time.sleep(1)
 
 
 def download(_year, _month):
