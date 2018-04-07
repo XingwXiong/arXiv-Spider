@@ -4,9 +4,11 @@ import threading
 
 # the patten to extract file id from the HTML context
 s_pattern_pdf = r'<span class="list-identifier">.*?\[<a href="/pdf/(.*?)" title="Download PDF">pdf</a>'
+# the pattern to extract total entries number
+s_pattern_entries = r'[ total of (.*?) entries:'
 base_url = 'https://arxiv.org'
 # skip means the offset, show means how many entries per page
-page_url = '/list/cs/1801?skip=0&show=1000'
+page_url = '/list/cs/1801'  # /list/cs/1801?skip=0&show=1000
 save_dir = './pdfs/'
 task_list = []
 task_list_lock = threading.Lock()
@@ -34,19 +36,31 @@ class Worker(threading.Thread):
 
 
 if __name__ == '__main__':
+    year = 18
+    month = 03
     spider = Spider(base_url, save_dir)
-    page = spider.get_page(page_url)
-    pattern_pdf = re.compile(s_pattern_pdf, re.S)
-    # get all the file id
-    task_list = re.findall(pattern_pdf, page)
-    workers = []
-    if task_list:
-        for index in range(1, worker_num):
-            worker = Worker(index, "Thread-%d" % index)
-            worker.start()
-            workers.append(worker)
-        for worker in workers:
-            worker.join()
-        print("All tasks finished! Exiting Main Thread")
-    else:
-        print('match failed:[%s]' % s_pattern_pdf)
+
+    while year > 15:
+        # /list/cs/1801?skip=0&show=1000
+        page_url = '/list/cs/%2d%2d?skip=0&show=1000' % (year, month)
+        page = spider.get_page(page_url)
+        pattern_pdf = re.compile(s_pattern_pdf, re.S)
+        # get all the file id
+        task_list = re.findall(pattern_pdf, page)
+        workers = []
+        if task_list:
+            for index in range(1, worker_num):
+                worker = Worker(index, "Thread-%d" % index)
+                worker.start()
+                workers.append(worker)
+            for worker in workers:
+                worker.join()
+        else:
+            print('match failed:[%s]' % s_pattern_pdf)
+            break
+        if month == 1:
+            month = 12
+            year = year - 1
+        else:
+            month = month - 1
+    print("All tasks finished! Exiting Main Thread")
