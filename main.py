@@ -2,12 +2,15 @@ import re
 from spider import Spider
 import threading
 
+# the patten to extract file id from the HTML context
 s_pattern_pdf = r'<span class="list-identifier">.*?\[<a href="/pdf/(.*?)" title="Download PDF">pdf</a>'
 base_url = 'https://arxiv.org'
+# skip means the offset, show means how many entries per page
+page_url = 'list/cs/1801?skip=0&show=1000'
 save_dir = './pdfs/'
 task_list = []
 task_list_lock = threading.Lock()
-worker_num = 10
+worker_num = 50
 
 
 class Worker(threading.Thread):
@@ -32,9 +35,9 @@ class Worker(threading.Thread):
 
 if __name__ == '__main__':
     spider = Spider(base_url, save_dir)
-    page = spider.get_page('/list/cs/1801')
+    page = spider.get_page(page_url)
     pattern_pdf = re.compile(s_pattern_pdf, re.S)
-    # get all the file names(excluding suffix)
+    # get all the file id
     task_list = re.findall(pattern_pdf, page)
     workers = []
     if task_list:
