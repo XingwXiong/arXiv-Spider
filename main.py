@@ -35,7 +35,7 @@ class Worker(threading.Thread):
                 break
             file_id = task_list[0]
             task_list.pop(0)
-            # to slow down the speed to
+            # sleep 1 second before downloading
             time.sleep(1)
             task_list_lock.release()
             file_name = "%s.pdf" % file_id
@@ -78,7 +78,7 @@ def download(_year, _month):
             return False
         print("Ranging from %d to %d was downloaded!" % (skip + 1, skip + task_list_size))
         skip = skip + show
-        time.sleep(10)
+        time.sleep(5)
     return True
 
 
