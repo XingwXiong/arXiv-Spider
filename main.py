@@ -14,7 +14,7 @@ SAVE_DIR = './pdfs/'
 task_list = []
 task_list_lock = threading.Lock()
 spider = Spider(BASE_URL, SAVE_DIR)
-WORKER_NUM = 50
+WORKER_NUM = 10
 BEGIN_YEAR = 15
 BEGIN_MONTH = 1
 END_YEAR = 18
@@ -35,18 +35,19 @@ class Worker(threading.Thread):
                 break
             file_id = task_list[0]
             task_list.pop(0)
+            # to slow down the speed to
+            time.sleep(1)
             task_list_lock.release()
             file_name = "%s.pdf" % file_id
             file_url = '/pdf/%s' % file_id
             spider.get_file(file_name, file_url)
-            time.sleep(1)
 
 
 def download(_year, _month):
     global task_list
     #  skip means the offset, show means how many entries per page
     skip = 0
-    show = 500
+    show = 100
     page_url = '/list/cs/%2d%02d' % (_year, _month)
     page = spider.get_page(page_url)
     pattern_total = re.compile(S_PATTERN_EMTRIES, re.S)
@@ -77,6 +78,7 @@ def download(_year, _month):
             return False
         print("Ranging from %d to %d was downloaded!" % (skip + 1, skip + task_list_size))
         skip = skip + show
+        time.sleep(10)
     return True
 
 
