@@ -1,6 +1,7 @@
 import re
-from spider import Spider
+import time
 import threading
+from spider import Spider
 
 # the patten to extract file id from the HTML context
 S_PATTERN_PDF = r'<span class="list-identifier">.*?\[<a href="/pdf/(.*?)" title="Download PDF">pdf</a>'
@@ -38,6 +39,7 @@ class Worker(threading.Thread):
             file_name = "%s.pdf" % file_id
             file_url = '/pdf/%s' % file_id
             spider.get_file(file_name, file_url)
+            time.sleep(1)
 
 
 def download(_year, _month):
