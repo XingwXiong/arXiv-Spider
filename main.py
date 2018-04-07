@@ -6,7 +6,7 @@ import threading
 s_pattern_pdf = r'<span class="list-identifier">.*?\[<a href="/pdf/(.*?)" title="Download PDF">pdf</a>'
 base_url = 'https://arxiv.org'
 # skip means the offset, show means how many entries per page
-page_url = 'list/cs/1801?skip=0&show=1000'
+page_url = '/list/cs/1801?skip=0&show=1000'
 save_dir = './pdfs/'
 task_list = []
 task_list_lock = threading.Lock()
