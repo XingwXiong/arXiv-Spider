@@ -69,6 +69,8 @@ def download(_year, _month):
     total_num = int(total_obj.group(1))
     print("page_url:%s\ntotal_num:%d" % (page_url, total_num))
     while skip < total_num:
+        # Randomly select the mirror address to download
+        spider.base_url = BASE_URLs[numpy.random.randint(0, len(BASE_URLs))]
         #  e.g.:/list/cs/1801?skip=0&show=1000
         page_url = '/list/cs/%02d%02d?skip=%d&show=%d' % (_year, _month, skip, show)
         page = spider.get_page(page_url)
