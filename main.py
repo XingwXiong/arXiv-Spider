@@ -1,5 +1,6 @@
 import re
 import time
+import numpy
 import threading
 from spider import Spider
 
@@ -7,13 +8,19 @@ from spider import Spider
 S_PATTERN_PDF = r'<span class="list-identifier">.*?\[<a href="/pdf/(.*?)" title="Download PDF">pdf</a>'
 # the pattern to extract total entries number
 S_PATTERN_EMTRIES = r'\[ total of (.*?) entries:'
-BASE_URL = 'https://arxiv.org'
+BASE_URLs = (
+    #  'https://arxiv.org',
+    'http://de.arxiv.org',
+    'http://cn.arxiv.org',
+    'http://lanl.arxiv.org',
+    'http://xxx.itp.ac.cn'
+)
 # the path to save the crawled files
 SAVE_DIR = './pdfs/'
 # It's a list of the file names to be crawled(Excluding file suffixes)
 task_list = []
 task_list_lock = threading.Lock()
-spider = Spider(BASE_URL, SAVE_DIR)
+spider = Spider(BASE_URLs[numpy.random.randint(0, len(BASE_URLs))], SAVE_DIR)
 WORKER_NUM = 10
 BEGIN_YEAR = 15
 BEGIN_MONTH = 1
@@ -35,6 +42,8 @@ class Worker(threading.Thread):
                 break
             file_id = task_list[0]
             task_list.pop(0)
+            # Randomly select the mirror address to download
+            spider.base_url = BASE_URLs[numpy.random.randint(0, len(BASE_URLs))]
             # sleep 1 second before downloading
             time.sleep(1)
             task_list_lock.release()
