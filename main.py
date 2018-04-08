@@ -44,14 +44,14 @@ class Worker(threading.Thread):
             task_list.pop(0)
             # Randomly select the mirror address to download
             spider.base_url = BASE_URLs[numpy.random.randint(0, len(BASE_URLs))]
-            # sleep 1 second before downloading
-            time.sleep(1)
+            # sleep 2 seconds before downloading
+            time.sleep(2)
             task_list_lock.release()
             file_name = "%s.pdf" % file_id
             file_url = '/pdf/%s' % file_id
             spider.get_file(file_name, file_url)
-            # sleep 1 second after downloading
-            time.sleep(1)
+            # sleep 2 seconds after downloading
+            time.sleep(2)
 
 
 def download(_year, _month):
@@ -89,7 +89,7 @@ def download(_year, _month):
             return False
         print("Ranging from %d to %d was downloaded!" % (skip + 1, skip + task_list_size))
         skip = skip + show
-        time.sleep(5)
+        time.sleep(10)
     return True
 
 

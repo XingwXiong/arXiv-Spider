@@ -12,3 +12,9 @@ With the default configuration, it can crawl the papers with submission dates fr
 
 
 Tips: When you meet the 403 error or "Access Denied" error, don't worry. It means the download speed was so fast that the system has detected our crawler. You should be patient, and try again a few minutes later.
+
+
+***
+
+Author: `Xingw Xiong`
+Date:   `2018-04-08`
